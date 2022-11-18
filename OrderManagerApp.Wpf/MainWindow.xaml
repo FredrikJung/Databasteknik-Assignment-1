@@ -1,0 +1,40 @@
+﻿<Window x:Class="OrderManagerApp.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrderManagerApp.Wpf"
+        mc:Ignorable="d"
+        Title="OrderManager" Height="700" Width="520">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Grid.Row="0" Margin="20 0 0 0">
+                <Button Name="btn_Order_Page" Content="Order" Click="btn_Order_Page_Click"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Grid.Row="0" Margin="3 0 0 0">
+                <Button Name="btn_Product_Page" Content="Produkter" Click="btn_Product_Page_Click"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Grid.Row="0" Margin="3 0 3 0">
+                <Button Name="btn_Customer_Page" Content="Kunder" Click="btn_Customer_Page_Click" />
+            </StackPanel>
+
+        </Grid>
+        
+        <Frame Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+
+    </Grid>
+</Window>

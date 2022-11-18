@@ -1,0 +1,71 @@
+﻿<Page x:Class="OrderManagerApp.Wpf.Pages.OrderPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OrderManagerApp.Wpf.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="500" d:Background="White"
+      Title="OrderPage">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Välj kund" Margin="0 0 0 5"/>
+            <ComboBox Name="cb_Customers" DisplayMemberPath="Name" Margin="0 0 0 10" />
+            <TextBlock Text="Välj produkt" Margin="0 0 0 5"/>
+            <ComboBox Name="cb_Products" DisplayMemberPath="ProductInfo" Margin="0 0 0 10"/>
+            <TextBlock Text="Ange antal av vald produkt" Margin="0 0 0 5"/>
+            <TextBox x:Name="tb_Quantity" Margin="0 0 0 10" Padding="5"/>
+            <Button Content="Lägg till" Name="btn_Add" Click="btn_Add_Click" Margin="0 20 0 20"/>
+        </StackPanel>
+
+        <ListView x:Name="lv_Order" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding ProductId}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Produkt" Width="174" DisplayMemberBinding="{Binding Name}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Pris/st" Width="130" DisplayMemberBinding="{Binding Price}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Antal" Width="100" DisplayMemberBinding="{Binding Quantity}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                    
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Content="Skapa order" Name="btn_Creat_Order" Click="btn_Creat_Order_Click" Grid.Row="2" Margin="0 20 0 0"/>
+
+
+    </Grid>
+</Page>
