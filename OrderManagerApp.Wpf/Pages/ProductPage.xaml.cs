@@ -53,49 +53,63 @@ namespace OrderManagerApp.Wpf.Pages
         }
         private async void btn_Create_Product_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if( tb_Product_Name.Text != "" && tb_Product_Price.Text != "")
             {
-                using var client = new HttpClient();
-
-                await client.PostAsJsonAsync("https://localhost:7131/api/Products", new ProductRequest
+                try
                 {
-                    Name = tb_Product_Name.Text,
-                    Price = decimal.Parse(tb_Product_Price.Text)
-                });
+                    using var client = new HttpClient();
 
-                MessageBox.Show("Produkt skapad");
-                tb_Product_Name.Text = "";
-                tb_Product_Price.Text = "";
-                cb_Products.SelectedIndex = -1;
-                await PopulateProducts();
+                    await client.PostAsJsonAsync("https://localhost:7131/api/Products", new ProductRequest
+                    {
+                        Name = tb_Product_Name.Text,
+                        Price = decimal.Parse(tb_Product_Price.Text)
+                    });
+
+                    MessageBox.Show("Produkt skapad");
+                    tb_Product_Name.Text = "";
+                    tb_Product_Price.Text = "";
+                    cb_Products.SelectedIndex = -1;
+                    await PopulateProducts();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Namn och pris krävs att fylla i för att skapa ny produkt");
             }
         }
         private async void btn_Update_Product_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if( tb_Product_Name.Text != "" && tb_Product_Price.Text != "")
             {
-                var uRL = "https://localhost:7131/api/Products";
-                using var client = new HttpClient();
-                var product = (ProductModel)cb_Products.SelectedItem;
+                try
+                {
+                    var uRL = "https://localhost:7131/api/Products";
+                    using var client = new HttpClient();
+                    var product = (ProductModel)cb_Products.SelectedItem;
 
-                product.Name = tb_Product_Name.Text;
-                product.Price = decimal.Parse(tb_Product_Price.Text);
+                    product.Name = tb_Product_Name.Text;
+                    product.Price = decimal.Parse(tb_Product_Price.Text);
 
-                await client.PutAsJsonAsync($"{uRL}?id={product.ProductId}", product);
+                    await client.PutAsJsonAsync($"{uRL}?id={product.ProductId}", product);
 
-                MessageBox.Show("Produkt uppdaterad");
-                tb_Product_Name.Text = "";
-                tb_Product_Price.Text = "";
-                cb_Products.SelectedIndex = -1;
-                await PopulateProducts();
+                    MessageBox.Show("Produkt uppdaterad");
+                    tb_Product_Name.Text = "";
+                    tb_Product_Price.Text = "";
+                    cb_Products.SelectedIndex = -1;
+                    await PopulateProducts();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Namn och pris krävs att fylla i för att uppdatera produkt");
             }
         }
         private void cb_Products_SelectionChanged(object sender, SelectionChangedEventArgs e)

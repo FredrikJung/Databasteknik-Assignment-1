@@ -54,46 +54,60 @@ namespace OrderManagerApp.Wpf.Pages
         }
         private async void btn_Create_Customer_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (tb_Customer_Name.Text != "")
             {
-                using var client = new HttpClient();
-
-                await client.PostAsJsonAsync("https://localhost:7131/api/Customers", new CustomerRequest
+                try
                 {
-                    Name = tb_Customer_Name.Text
-                });
+                    using var client = new HttpClient();
 
-                MessageBox.Show("Kund skapad");
-                tb_Customer_Name.Text = "";
-                cb_Customers.SelectedIndex = -1;
-                await PopulateCustomers();
+                    await client.PostAsJsonAsync("https://localhost:7131/api/Customers", new CustomerRequest
+                    {
+                        Name = tb_Customer_Name.Text
+                    });
+
+                    MessageBox.Show("Kund skapad");
+                    tb_Customer_Name.Text = "";
+                    cb_Customers.SelectedIndex = -1;
+                    await PopulateCustomers();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Namn krävs att fylla i för att skapa ny kund");
             }
         }
 
         private async void btn_Update_Customer_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if(tb_Customer_Name.Text != "")
             {
-                var uRL = "https://localhost:7131/api/Customers";
-                using var client = new HttpClient();
-                var customer = (CustomerModel)cb_Customers.SelectedItem;
+                try
+                {
+                    var uRL = "https://localhost:7131/api/Customers";
+                    using var client = new HttpClient();
+                    var customer = (CustomerModel)cb_Customers.SelectedItem;
 
-                customer.Name = tb_Customer_Name.Text;
+                    customer.Name = tb_Customer_Name.Text;
 
-                await client.PutAsJsonAsync($"{uRL}?id={customer.CustomerId}", customer);
+                    await client.PutAsJsonAsync($"{uRL}?id={customer.CustomerId}", customer);
 
-                MessageBox.Show("Kund uppdaterad");
-                tb_Customer_Name.Text = "";
-                cb_Customers.SelectedIndex = -1;
-                await PopulateCustomers();
+                    MessageBox.Show("Kund uppdaterad");
+                    tb_Customer_Name.Text = "";
+                    cb_Customers.SelectedIndex = -1;
+                    await PopulateCustomers();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Namn krävs att fylla i för att uppdatera kund");
             }
         }
 
