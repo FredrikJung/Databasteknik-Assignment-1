@@ -83,14 +83,14 @@ namespace OrderManagerApp.Wpf.Pages
 
         private async void btn_Update_Customer_Click(object sender, RoutedEventArgs e)
         {
-            if(tb_Customer_Name.Text != "")
+            var uRL = "https://localhost:7131/api/Customers";
+            using var client = new HttpClient();
+            var customer = (CustomerModel)cb_Customers.SelectedItem;
+
+            if (customer != null && tb_Customer_Name.Text != "")
             {
                 try
                 {
-                    var uRL = "https://localhost:7131/api/Customers";
-                    using var client = new HttpClient();
-                    var customer = (CustomerModel)cb_Customers.SelectedItem;
-
                     customer.Name = tb_Customer_Name.Text;
 
                     await client.PutAsJsonAsync($"{uRL}?id={customer.CustomerId}", customer);
@@ -130,25 +130,33 @@ namespace OrderManagerApp.Wpf.Pages
 
         private async void btn_Delete_Customer_Click(object sender, RoutedEventArgs e)
         {
-            try
+            var uRL = "https://localhost:7131/api/Customers/id";
+            using var client = new HttpClient();
+            var customer = (CustomerModel)cb_Customers.SelectedItem;
+
+            if(customer != null)
             {
-                var uRL = "https://localhost:7131/api/Customers/id";
-                using var client = new HttpClient();
-                var customer = (CustomerModel)cb_Customers.SelectedItem;
-                var customers = new ObservableCollection<CustomerModel>();
+                try
+                {
+                    var customers = new ObservableCollection<CustomerModel>();
 
-                customers.Remove(customer);
+                    customers.Remove(customer);
 
-                await client.DeleteAsync($"{uRL}?id={customer.CustomerId}");
+                    await client.DeleteAsync($"{uRL}?id={customer.CustomerId}");
 
-                MessageBox.Show("Kund borttagen");
-                tb_Customer_Name.Text = "";
-                cb_Customers.SelectedIndex = -1;
-                await PopulateCustomers();
+                    MessageBox.Show("Kund borttagen");
+                    tb_Customer_Name.Text = "";
+                    cb_Customers.SelectedIndex = -1;
+                    await PopulateCustomers();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Du måste välja en kund i listan att ta bort");
             }
         }
     }

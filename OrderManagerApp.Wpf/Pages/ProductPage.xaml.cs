@@ -83,14 +83,14 @@ namespace OrderManagerApp.Wpf.Pages
         }
         private async void btn_Update_Product_Click(object sender, RoutedEventArgs e)
         {
-            if( tb_Product_Name.Text != "" && tb_Product_Price.Text != "")
+            var uRL = "https://localhost:7131/api/Products";
+            using var client = new HttpClient();
+            var product = (ProductModel)cb_Products.SelectedItem;
+
+            if ( product != null && tb_Product_Name.Text != "" && tb_Product_Price.Text != "")
             {
                 try
                 {
-                    var uRL = "https://localhost:7131/api/Products";
-                    using var client = new HttpClient();
-                    var product = (ProductModel)cb_Products.SelectedItem;
-
                     product.Name = tb_Product_Name.Text;
                     product.Price = decimal.Parse(tb_Product_Price.Text);
 
@@ -131,27 +131,34 @@ namespace OrderManagerApp.Wpf.Pages
         }
         private async void btn_Delete_Product_Click(object sender, RoutedEventArgs e)
         {
-            try
+            var uRL = "https://localhost:7131/api/Products/id";
+            using var client = new HttpClient();
+            var product = (ProductModel)cb_Products.SelectedItem;
+
+            if ( product != null)
             {
-                var uRL = "https://localhost:7131/api/Products/id";
-                using var client = new HttpClient();
-                var product = (ProductModel)cb_Products.SelectedItem;
+                try
+                {
+                    var products = new ObservableCollection<ProductModel>();
 
-                var products = new ObservableCollection<ProductModel>();
+                    products.Remove(product);
 
-                products.Remove(product);
+                    await client.DeleteAsync($"{uRL}?id={product.ProductId}");
 
-                await client.DeleteAsync($"{uRL}?id={product.ProductId}");
-
-                MessageBox.Show("Produkt borttagen");
-                tb_Product_Name.Text = "";
-                tb_Product_Price.Text = "";
-                cb_Products.SelectedIndex = -1;
-                await PopulateProducts();
+                    MessageBox.Show("Produkt borttagen");
+                    tb_Product_Name.Text = "";
+                    tb_Product_Price.Text = "";
+                    cb_Products.SelectedIndex = -1;
+                    await PopulateProducts();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Du måste välja en produkt i listan att ta bort");
             }
         }
     }
